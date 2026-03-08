@@ -6,10 +6,13 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+    
     - name: Build with Make
       run: make
+    
     - name: Create data directory
       run: mkdir -p data
+    
     - name: Create input file
       run: |
         cat > data/input.txt << EOF
@@ -17,7 +20,16 @@ jobs:
         Петров Петр Петрович 654321 Беларусь Минская область Минский Минск Независимости 20 3 Белорус 1975 3 10 2 102 Среднее 2019
         Сидоров Сидор Сидорович 789012 Россия Ленинградская область Всеволожский Санкт-Петербург Невский 15 7 Русский 1990 7 22 1 103 Высшее 2020
         EOF
+    
     - name: Run program
       run: ./program
+    
     - name: Check output
-      run: cat data/output.txt || echo "No output file"
+      run: |
+        if [ -f "data/output.txt" ]; then
+          echo "Файл найден!"
+          cat data/output.txt
+        else
+          echo "Файл не найден"
+          exit 1
+        fi
